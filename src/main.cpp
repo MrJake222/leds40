@@ -1,52 +1,63 @@
 #include <Arduino.h>
 
-#define LED_STATUS  5
-#define LED_R       12
-#define LED_G       13
-#define LED_B       14
+#include <hw.hpp>
+#include <logger.hpp>
+#include <wifimng.hpp>
+#include <wifievents.hpp>
+#include <server.hpp>
+#include <ledstrip.hpp>
 
-#define PWM_MAX     1023
+mrwski::Logger logger;
+mrwski::WifiMng wifimng(logger);
+mrwski::WifiEvents wifiev(logger);
+mrwski::Server server(logger, wifimng, 80, nullptr);
+mrwski::LEDStrip leds(LED_R, LED_G, LED_B);
 
-void setLed(int pin, int lvl) {
-    analogWrite(pin, lvl*lvl/PWM_MAX);
-}
-
-void sweepUp(int p) {
-    for (int i=0; i<=PWM_MAX; i++) {
-        setLed(p, i);
-        delay(1);
+int fs_init() {
+    bool ok = LittleFS.begin();
+    if (!ok) {
+        logger.println("failed to setup FS");
+        return 1;
     }
+
+    logger.println("FS init ok");
+
+    fs::FSInfo i;
+    LittleFS.info(i);
+    logger.printf("Used: %d / %d bytes (free %d bytes)\n", i.usedBytes, i.totalBytes, i.totalBytes - i.usedBytes);
+
+    // logger.println("files present:");
+    // listAllFilesInDir("/");
+    // logger.println("");
+
+    return 0;
 }
 
-void sweepDown(int p) {
-    for (int i=PWM_MAX; i>=0; i--) {
-        setLed(p, i);
-        delay(1);
-    }
-}
+#define NTP_SERVER "pl.pool.ntp.org"
+#define TZ "CET-1CEST,M3.5.0,M10.5.0/3"
+
+// TODO status led + integrate with wifi
+// TODO route injection to Server
+// TODO led control + simple frontend
 
 void setup() {
-    analogWriteRange(PWM_MAX);
+    Serial.begin(115200);
+    Serial.println();
+    logger.begin_serial(Serial);
 
-    pinMode(LED_STATUS, OUTPUT);
-    analogWrite(LED_STATUS, 0);
+    fs_init();
+    logger.begin_fs("/log");
 
-    pinMode(LED_R, OUTPUT);
-    pinMode(LED_G, OUTPUT);
-    pinMode(LED_B, OUTPUT);
-    analogWrite(LED_R, 0);
-    analogWrite(LED_G, 0);
-    analogWrite(LED_B, 0);
+    wifimng.begin();
+    wifiev.register_events();
 
-    sweepUp(LED_STATUS);
-    sweepUp(LED_R);
+    server.begin();
+    leds.begin();
+
+    configTime(TZ, NTP_SERVER);
 }
 
 void loop() {
-    sweepUp(LED_G);
-    sweepDown(LED_R);
-    sweepUp(LED_B);
-    sweepDown(LED_G);
-    sweepUp(LED_R);
-    sweepDown(LED_B);
+    wifimng.loop();
+    server.loop();
 }
