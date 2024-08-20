@@ -45,13 +45,13 @@ void WifiEvents::print_disconnect_reason(WiFiDisconnectReason reason) {
 void WifiEvents::wifi_event_StationModeConnected(const WiFiEventStationModeConnected& data) {
     char buf[20];
     mac_to_string(buf, data.bssid);
-    logger.printf("WiFi STA mode connected to %s (%s) channel %d\n", data.ssid.c_str(), buf, data.channel);
+    logger.printf("\tWiFi STA mode connected to %s (%s) channel %d\n", data.ssid.c_str(), buf, data.channel);
 }
 
 void WifiEvents::wifi_event_StationModeDisconnected(const WiFiEventStationModeDisconnected& data) {
     char buf[20];
     mac_to_string(buf, data.bssid);
-    logger.printf("WiFi STA mode disconnected from %s (%s) reason ", data.ssid.c_str(), buf);
+    logger.printf("\tWiFi STA mode disconnected from %s (%s) reason ", data.ssid.c_str(), buf);
     print_disconnect_reason(data.reason);
     logger.print("\n");
 }
@@ -61,26 +61,26 @@ void WifiEvents::wifi_event_StationModeAuthModeChanged(const WiFiEventStationMod
 }
 
 void WifiEvents::wifi_event_StationModeGotIP(const WiFiEventStationModeGotIP& data) {
-    logger.printf("WiFi STA mode got ip %s mask %s gw %s\n",
+    logger.printf("\tWiFi STA mode got ip %s mask %s gw %s\n",
         data.ip.toString().c_str(),
         data.mask.toString().c_str(),
         data.gw.toString().c_str());
 }
 
 void WifiEvents::wifi_event_StationModeDHCPTimeout() {
-    logger.println("WiFi STA mode DHCP timeout");
+    logger.println("\tWiFi STA mode DHCP timeout");
 }
 
 void WifiEvents::wifi_event_SoftAPModeStationConnected(const WiFiEventSoftAPModeStationConnected& data) {
     char buf[20];
     mac_to_string(buf, data.mac);
-    logger.printf("WiFi AP mode station connected mac %s\n", buf);
+    logger.printf("\tWiFi AP mode station connected mac %s\n", buf);
 }
 
 void WifiEvents::wifi_event_SoftAPModeStationDisconnected(const WiFiEventSoftAPModeStationDisconnected& data) {
     char buf[20];
     mac_to_string(buf, data.mac);
-    logger.printf("WiFi AP mode station disconnected mac %s\n", buf);
+    logger.printf("\tWiFi AP mode station disconnected mac %s\n", buf);
 }
 
 void WifiEvents::wifi_event_SoftAPModeProbeRequestReceived(const WiFiEventSoftAPModeProbeRequestReceived& data) {
@@ -88,9 +88,9 @@ void WifiEvents::wifi_event_SoftAPModeProbeRequestReceived(const WiFiEventSoftAP
 }
 
 void WifiEvents::wifi_event_WiFiModeChange(const WiFiEventModeChange& data) {
-    logger.printf("WiFi change mode %s -> %s\n",
-        WifiMng::mode_to_struct(data.oldMode).name.c_str(),
-        WifiMng::mode_to_struct(data.newMode).name.c_str());
+    logger.printf("\tWiFi change mode %s -> %s\n",
+        WifiMng::mode_to_struct(data.oldMode).name,
+        WifiMng::mode_to_struct(data.newMode).name);
 
     // constantly shows WIFI_AP_STA -> WIFI_OFF
 }

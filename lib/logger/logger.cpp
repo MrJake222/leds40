@@ -117,4 +117,8 @@ String Logger::get_date_time() {
     return date;
 }
 
+void Logger::dot() {
+    // print(".");
+}
+
 }; // end namespace

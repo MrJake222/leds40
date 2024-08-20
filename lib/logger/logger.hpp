@@ -12,7 +12,7 @@ namespace mrwski {
 
 class Logger : public Print {
 
-    const size_t flush_trigger      = 1;
+    const size_t flush_trigger      = 128;
     const size_t trunc_trigger      = 128*1024;  // 128kB ~ 4 months
     const size_t trunc_target_size  =  64*1024;  //  64kB ~ 2 months
 
@@ -41,6 +41,8 @@ public:
     void flush();
 
     size_t write(uint8_t c) override;
+
+    void dot();
 };
 
 }; // end namespace

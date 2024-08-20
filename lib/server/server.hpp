@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ESP8266WebServer.h>
+#include <espserver.hpp>
 #include <ESP8266HTTPUpdateServer.h>
 #include <ArduinoJson.h>
 
@@ -15,7 +15,8 @@ class Server {
     WifiMng& wifimng;
 
     const short port;
-    ESP8266WebServer esp_server;
+    // own wrapper class to expose lastChange protected field
+    EspServer esp_server;
     ESP8266HTTPUpdateServer esp_update_server;
 
     // server functions
@@ -31,7 +32,7 @@ class Server {
     void redirect(const String& url);
 
     void (*config_changed_callback)();
-    void config_changed();
+    const wl_status_t& sta_fail_reason;
 
     void handle_wifi_scan();
     void handle_wifi_status();
@@ -39,31 +40,29 @@ class Server {
     void handle_wifi_sta_config();
     void handle_log();
 
-    // int last_error = -1;
-    // int led_state = 0;
-
-    // helpers
+    void stop();
 
 public:
     Server(Logger& logger_,
            WifiMng& wifimng_,
            short port,
-           void (*config_changed_callback)())
+           void (*config_changed_callback_)(),
+           const wl_status_t& sta_fail_reason_)
         : logger(logger_)
         , wifimng(wifimng_)
         , port(port)
         , esp_server(port)
-        , config_changed_callback(config_changed_callback)
+        , config_changed_callback(config_changed_callback_)
+        , sta_fail_reason(sta_fail_reason_)
         {
             esp_update_server.setup(&esp_server);
         }
 
     void begin();
-    void stop();
-    void restart() { stop();
-        begin(); }
-
+    void restart() { stop(); begin(); }
     void loop();
+
+    ulong ms_since_last_conn();
 };
 
 } // end namespace mrjake

@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP 8266</title>
-    <link rel="stylesheet" href="sta_style.css">
+    <style>
+         li { margin: 6px 0; }
+        .led { color: green; }
+        .blink { animation: blinker 0.25s ease infinite alternate; }
+        @keyframes blinker {
+            0%   {opacity: 0%;}
+            100% {opacity: 100%;}
+        }
+    </style>
 </head>
 <body>
     <h1>STA mode turned ON</h1>
 
     On-board LED provides status monitoring:
     <ul>
-        <li><span class="blue blink">Blinking</span> - connection in progress,</li>
-        <li><span class="blue">Solid</span> - connection failed,</li>
+        <li><span class="led blink">Blinking</span> - connection in progress,</li>
+        <li><span class="led">Solid</span> - connection failed,</li>
         <li>Turned off - connection established</li>
     </ul>
 

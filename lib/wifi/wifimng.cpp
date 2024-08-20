@@ -1,7 +1,5 @@
 #include "wifimng.hpp"
 
-#include <ESP8266WiFi.h>
-
 namespace mrwski {
 
 void WifiMng::begin() {
@@ -24,6 +22,7 @@ void WifiMng::ap_loop() {
         if (wifi_softap_get_station_num() > 0) {
             // if anything is connected, wait
             ap_time = 0;
+            ledst.ap_conn();
         }
 
         else {
@@ -32,7 +31,8 @@ void WifiMng::ap_loop() {
             }
 
             ap_time++;
-            logger.print(".");
+            logger.dot();
+            ledst.ap_wait();
         }
     }
 
@@ -44,57 +44,79 @@ void WifiMng::ap_loop() {
         WiFi.begin();
         logger.println("Enabling STA mode with saved config");
 
-        wait_for_sta();
+        wait_for_sta(false);
     }
 }
 
 void WifiMng::sta_loop() {
-    if (WiFi.status() != WL_CONNECTED) {
-        if (sta_tries % 10 == 0) {
-            logger.printf("Connecting to %s, try %d, status: %s\n",
-                          WiFi.SSID().c_str(),
-                          sta_tries,
-                          sta_status_to_string(WiFi.status()).c_str());
-        }
+    wl_status_t status = WiFi.status();
+    if (sta_time % 10 == 0) {
+        logger.printf("Connecting to %s, try %d, status: %s\n",
+                      WiFi.SSID().c_str(),
+                      sta_time,
+                      status_to_string(status));
+    }
 
-        if (WiFi.status() != WL_DISCONNECTED) {
-            // Don't give up
-            WiFi.begin();
-        }
+    if (sta_fail && (sta_time >= sta_fail_time)) {
+        logger.printf("Giving up after %d/%d tries, error: %s\n", sta_time, sta_fail_time, status_to_string(sta_fail_reason));
+        WiFi.disconnect();
+        sta_check = false;
+        ledst.sta_err();
+    }
 
-        sta_tries++;
-        logger.print(".");
+    else if (status == WL_CONNECTED) {
+        // Success!
+        logger.printf("Connected to %s in %d tries\n", WiFi.SSID().c_str(), sta_time);
+        sta_fail_reason = status;
+        sta_check = false;
+        ledst.sta_ok();
+        if (config_changed_callback)
+            config_changed_callback();
+
+        // in case the connection from AP succeeded
+        // don't switch anymore, the AP should be disabled manually by the user
+        ap = false;
+    }
+
+    else if (status == WL_DISCONNECTED) {
+        // no operation, connection in progress
+    }
+
+    else if (status == WL_IDLE_STATUS) {
+        // no wifi configured, or aborted
+        sta_check = false;
+        ledst.sta_err();
     }
 
     else {
-        // Success!
-        // status CONNECTED
-
-        // config_changed();
-        // server.restart();
-
-        logger.println("Connected in STA mode");
-        logger.println("IP: " + WiFi.localIP().toString());
-
-        sta_check = false;
+        // failed
+        logger.printf("Failed to connect, try %d, reason %s\n", sta_time, status_to_string(status));
+        sta_fail_reason = status;
+        // don't give up
+        WiFi.begin();
     }
+
+    logger.dot();
+    sta_time++;
 }
 
 void WifiMng::loop() {
-    if ((millis() - last_check_ms) >= 1000) {
-        if (ap)         ap_loop();
+    if ((millis() - last_check_ms) >= (1000 / tps)) {
         if (sta_check)  sta_loop();
+        else if (ap)    ap_loop();
 
         last_check_ms = millis();
     }
 }
 
-void WifiMng::wait_for_sta() {
+void WifiMng::wait_for_sta(bool fail) {
     sta_check = true;
-    sta_tries = 0;
+    sta_time = 0;
+    sta_fail = fail;
+    ledst.sta_wait();
 }
 
-struct WifiMng::wifi_mode WifiMng::mode_to_struct(int code) {
+struct WifiMng::wifi_mode WifiMng::mode_to_struct(WiFiMode_t code) {
 
     struct wifi_mode mode;
     mode.ap = false;
@@ -130,10 +152,10 @@ struct WifiMng::wifi_mode WifiMng::mode_to_struct(int code) {
     return mode;
 }
 
-String WifiMng::sta_status_to_string(int status) {
+const char* WifiMng::status_to_string(wl_status_t status) {
     switch (status) {
         case WL_CONNECTED:
-            return "Connected to " + WiFi.SSID();
+            return "Connected";
 
         case WL_NO_SSID_AVAIL:
             return "No such network";

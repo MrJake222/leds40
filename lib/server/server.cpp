@@ -37,10 +37,8 @@ void Server::redirect(const String& url) {
     esp_server.send(301, "text/plain", "Redirection in progress...");
 }
 
-void Server::config_changed() {
-    restart();
-    if (config_changed_callback)
-        config_changed_callback();
+ulong Server::ms_since_last_conn() {
+    return millis() - esp_server.get_statusChange();
 }
 
 void Server::handle_wifi_scan() {
@@ -101,7 +99,7 @@ void Server::handle_wifi_status() {
     }
 
     if (mode.sta) {
-        json_doc["sta_status_string"] = WifiMng::sta_status_to_string(WiFi.status());
+        json_doc["sta_status_string"] = WifiMng::status_to_string(sta_fail_reason);
         json_doc["sta_ip"] = WiFi.localIP().toString();
     }
 
@@ -126,7 +124,8 @@ void Server::handle_wifi_ap_config() {
         WiFi.softAP("ESP8266");
     }
 
-    config_changed();
+    if (config_changed_callback)
+        config_changed_callback();
 }
 
 void Server::handle_wifi_sta_config() {
@@ -162,7 +161,7 @@ void Server::handle_wifi_sta_config() {
 
         // We don't call config_changed() or anything
         // because we need to wait till ESP connects
-        wifimng.wait_for_sta();
+        wifimng.wait_for_sta(true);
     }
 }
 
