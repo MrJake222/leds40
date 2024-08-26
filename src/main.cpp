@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <SimpleFTPServer.h>
 
 #include <hw.hpp>
 
@@ -14,12 +15,15 @@ void config_changed();
 mrwski::Logger logger;
 mrwski::LEDStatus ledst(LED_STATUS);
 mrwski::LEDStrip leds(LED_R, LED_G, LED_B);
+mrwski::Name name;
 
 wl_status_t sta_fail_reason;
 
 mrwski::WifiEvents wifiev(logger);
 mrwski::WifiMng wifimng(logger, ledst, config_changed, sta_fail_reason);
-mrwski::Server server(logger, wifimng, 80, config_changed, sta_fail_reason);
+mrwski::Server server(logger, wifimng, name, 80, config_changed, sta_fail_reason);
+
+FtpServer ftp;
 
 int fs_init() {
     bool ok = LittleFS.begin();
@@ -44,10 +48,26 @@ int fs_init() {
 #define NTP_SERVER "pl.pool.ntp.org"
 #define TZ "CET-1CEST,M3.5.0,M10.5.0/3"
 
-// TODO status led + integrate with wifi
 // TODO route injection to Server
 // TODO led control + simple frontend
-// TODO FTP server
+// TODO web: display system time
+// TODO web: reset button
+
+int ftp_cli;
+void ftp_cb(FtpOperation ftpOperation, uint freeSpace, uint totalSpace) {
+    switch (ftpOperation) {
+        case FTP_CONNECT:
+            ftp_cli++;
+            break;
+
+        case FTP_DISCONNECT:
+            ftp_cli--;
+            break;
+
+        case FTP_FREE_SPACE_CHANGE:
+            break;
+    }
+}
 
 void setup() {
     Serial.begin(115200);
@@ -65,20 +85,27 @@ void setup() {
 
     server.begin();
 
+    ftp_cli = 0;
+    ftp.begin("norbert", "marcel!!");
+    ftp.setCallback(ftp_cb);
+
     configTime(TZ, NTP_SERVER);
 }
 
 void config_changed() {
     server.restart();
+    ftp.setLocalIp(WiFi.localIP());
 }
 
 void loop() {
     wifimng.loop();
     server.loop();
     ledst.loop();
+    ftp.handleFTP();
 
-    if (WiFi.status() == WL_CONNECTED) {
-        // if web server reports no activity long periods of time
+    if (WiFi.status() == WL_CONNECTED && ftp_cli == 0) {
+        // if wifi is connected and ftp has no clients
+        // and web server reports no activity long periods of time
         // delay to enter light sleep mode, 75mA -> 35mA current draw reduction
         // and less heat from AMS1117
         if (server.ms_since_last_conn() > 5e3)

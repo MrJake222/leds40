@@ -10,6 +10,7 @@
     <script>
         window.onload = () => {
             load_status()
+            load_name()
             document.getElementById("load_aps").onclick = (e) => {
                 e.preventDefault()
                 load_networks()
@@ -69,6 +70,19 @@
             </section>
 
             <input type='submit' value='Apply STA settings'/>
+        </article>
+    </form>
+
+    <form action="/name" method="POST">
+        <header>Device name</header>
+        <article>
+            <div class="status">
+                <span>Current name:</span>
+                <div id="loading_name" class="loading_mode loading">Loading...</div>
+            </div>
+
+            New name: <input type='text' name='name' id="text_name" /><br/>
+            <input type='submit' value='Set new name'/>
         </article>
     </form>
 

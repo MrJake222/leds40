@@ -12,6 +12,8 @@ void Server::begin() {
     esp_server.on("/wifi_ap_config", HTTP_POST,[this] { handle_wifi_ap_config(); });
     esp_server.on("/wifi_sta_config", HTTP_POST, [this] { handle_wifi_sta_config(); });
     esp_server.on("/log", HTTP_GET, [this] { handle_log(); });
+    esp_server.on("/name", HTTP_GET, [this] { handle_name_get(); });
+    esp_server.on("/name", HTTP_POST, [this] { handle_name_post(); });
 
     esp_server.serveStatic("/", LittleFS, "/static/");
 
@@ -173,6 +175,25 @@ void Server::handle_log() {
     file.close();
 }
 
+void Server::handle_name_get() {
+    json_doc.clear();
+
+    char namestr[32];
+    name.get(namestr, 32);
+    json_doc["name"] = String(namestr);
+
+    serialize_and_send_json();
+}
+
+void Server::handle_name_post() {
+    if (!esp_server.hasArg("name")) {
+        redirect("/config/status/name_err.html");
+        return;
+    }
+
+    name.set(esp_server.arg("name").c_str());
+    redirect("/config/status/name_ok.html");
+}
 
 
 } // end namespace

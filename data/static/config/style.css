@@ -81,7 +81,7 @@ input[type=submit] {
 
 .status {
 	display: flex;
-	padding: 12px 1px;
+	padding: 12px 0px;
 }
 
 .status span {

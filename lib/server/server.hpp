@@ -6,6 +6,7 @@
 
 #include <logger.hpp>
 #include <wifimng.hpp>
+#include "name.hpp"
 
 namespace mrwski {
 
@@ -13,6 +14,7 @@ class Server {
 
     Logger& logger;
     WifiMng& wifimng;
+    Name& name;
 
     const short port;
     // own wrapper class to expose lastChange protected field
@@ -39,17 +41,21 @@ class Server {
     void handle_wifi_ap_config();
     void handle_wifi_sta_config();
     void handle_log();
+    void handle_name_get();
+    void handle_name_post();
 
     void stop();
 
 public:
     Server(Logger& logger_,
            WifiMng& wifimng_,
+           Name& name_,
            short port,
            void (*config_changed_callback_)(),
            const wl_status_t& sta_fail_reason_)
         : logger(logger_)
         , wifimng(wifimng_)
+        , name(name_)
         , port(port)
         , esp_server(port)
         , config_changed_callback(config_changed_callback_)
