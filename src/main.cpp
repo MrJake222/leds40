@@ -12,18 +12,19 @@
 
 void config_changed();
 
+// control classes
 mrwski::Logger logger;
 mrwski::LEDStatus ledst(LED_STATUS);
-mrwski::LEDStrip leds(LED_R, LED_G, LED_B);
 mrwski::Name name;
-
 wl_status_t sta_fail_reason;
-
 mrwski::WifiEvents wifiev(logger);
 mrwski::WifiMng wifimng(logger, ledst, config_changed, sta_fail_reason);
 mrwski::Server server(logger, wifimng, name, 80, config_changed, sta_fail_reason);
-
 FtpServer ftp;
+
+// functionality
+// injects its routes to server
+mrwski::LEDStrip leds(server, LED_R, LED_G, LED_B);
 
 int fs_init() {
     bool ok = LittleFS.begin();

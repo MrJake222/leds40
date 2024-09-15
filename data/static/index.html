@@ -4,17 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED4.0</title>
+
+    <link rel="stylesheet" href="func/style.css">
+    <script src="func/watch.js" defer></script>
 </head>
 
 <body>
-    <section class="section">
-        <p class="title">Status modułu LED</p>
-        <section class="statuses">
-            <div class="links">
-                <a href="/config/">Konfiguracja ESP</a><br/>
-                <a href="/log">Zobacz log</a>
-            </div>
-        </section>
-    </section>
+    <div class="links">
+        <a href="/config/">Konfiguracja ESP</a>
+        <a href="/log">Log</a>
+        <a href="/update">Aktualizacja</a>
+    </div>
+
+    <div class="sliders">
+        <div class="named-slider">
+            <div class="red">Red</div>
+            <input id="slider-red" type="range" min="0" max="255">
+        </div>
+        <div class="named-slider">
+            <div class="green">Green</div>
+            <input id="slider-green" type="range" min="0" max="255">
+        </div>
+        <div class="named-slider">
+            <div class="blue">Blue</div>
+            <input id="slider-blue" type="range" min="0" max="255">
+        </div>
+    </div>
 </body>
 </html>

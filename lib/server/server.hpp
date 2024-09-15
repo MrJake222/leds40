@@ -69,6 +69,18 @@ public:
     void loop();
 
     ulong ms_since_last_conn();
+
+    // To be used by route-injecting classes
+    void func_route(const Uri &uri, HTTPMethod method, EspServer::THandlerFunction fn)
+        { esp_server.on(uri, method, std::move(fn)); }
+
+    bool        func_has_arg(const char* name) { return esp_server.hasArg(name); }
+    const char* func_get_arg(const char* name) { return esp_server.arg(name).c_str(); }
+    void func_ack() { esp_server.send(200, "text/plain", "ok"); }
+
+    // Dirty hack, this class should be read-only by a project
+    // currently used to access json doc and serialize
+    friend class LEDStrip;
 };
 
 } // end namespace mrjake
