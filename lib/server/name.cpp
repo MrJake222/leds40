@@ -15,7 +15,7 @@ int Name::set(const char* name) {
     return 0;
 }
 
-int Name::get(char* name, uint maxlen) {
+int Name::get(char* name, uint buflen) {
     uint len;
 
     File file = LittleFS.open("/name", "r");
@@ -25,8 +25,11 @@ int Name::get(char* name, uint maxlen) {
     }
 
     file.read((uint8_t*)&len, sizeof(len));
-    file.read((uint8_t*)name, std::min(len, maxlen));
+    len = std::min(len, buflen-1);
+    file.read((uint8_t*)name, len);
     file.close();
+
+    name[len] = '\0';
 
     return 0;
 }

@@ -6,17 +6,30 @@
     <title>LED4.0</title>
 
     <link rel="stylesheet" href="func/style.css">
-    <script src="func/watch.js" defer></script>
+    <script src="func/led.js" defer></script>
+    <script src="func/ledtest.js" defer></script>
+    <script src="func/name.js" defer></script>
+    <script>
+        window.onload = () => {
+            led_load()
+            name_load()
+        }
+    </script>
 </head>
 
 <body>
-    <div class="links">
-        <a href="/config/">Konfiguracja ESP</a>
-        <a href="/log">Log</a>
-        <a href="/update">Aktualizacja</a>
+    <h2 id="h2top">Moduł LED</h2>
+    <div id="divname">Ładowanie...</div>
+    <div class="section">
+        <div class="links">
+            <a href="/config/">Konfiguracja ESP</a>
+            <a href="/log">Log</a>
+            <a href="/update">Aktualizacja</a>
+        </div>
     </div>
 
-    <div class="sliders">
+    <h2>Sterowanie</h2>
+    <div class="section">
         <div class="named-slider">
             <div class="red">Red</div>
             <input id="slider-red" type="range" min="0" max="255">
@@ -29,6 +42,7 @@
             <div class="blue">Blue</div>
             <input id="slider-blue" type="range" min="0" max="255">
         </div>
+        <button onclick="selftest()">Test</button>
     </div>
 </body>
 </html>

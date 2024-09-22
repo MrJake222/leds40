@@ -79,12 +79,16 @@ input[type=submit] {
 	margin-top: 12px;
 }
 
+.mac {
+	display: flex;
+}
+
 .status {
 	display: flex;
 	padding: 12px 0px;
 }
 
-.status span {
+.status span, .mac span {
 	margin-right: 9px;
 }
 

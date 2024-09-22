@@ -43,6 +43,7 @@ class Server {
     void handle_log();
     void handle_name_get();
     void handle_name_post();
+    void handle_mac_get();
 
     void stop();
 

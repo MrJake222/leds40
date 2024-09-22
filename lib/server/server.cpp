@@ -14,6 +14,7 @@ void Server::begin() {
     esp_server.on("/log", HTTP_GET, [this] { handle_log(); });
     esp_server.on("/name", HTTP_GET, [this] { handle_name_get(); });
     esp_server.on("/name", HTTP_POST, [this] { handle_name_post(); });
+    esp_server.on("/mac", HTTP_GET, [this] { handle_mac_get(); });
 
     esp_server.serveStatic("/", LittleFS, "/static/");
 
@@ -193,6 +194,12 @@ void Server::handle_name_post() {
 
     name.set(esp_server.arg("name").c_str());
     redirect("/config/status/name_ok.html");
+}
+
+void Server::handle_mac_get() {
+    json_doc.clear();
+    json_doc["mac"] = WiFi.macAddress();
+    serialize_and_send_json();
 }
 
 

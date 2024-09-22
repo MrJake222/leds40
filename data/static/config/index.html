@@ -11,6 +11,7 @@
         window.onload = () => {
             load_status()
             load_name()
+            load_mac()
             document.getElementById("load_aps").onclick = (e) => {
                 e.preventDefault()
                 load_networks()
@@ -38,6 +39,10 @@
     <form action="/wifi_sta_config" method="POST">
         <header>Station</header>
         <article>
+            <div class="mac">
+                <span>MAC address:</span>
+                <div id="loading_sta_mac" class="loading_mode loading">Loading...</div>
+            </div>
             <div class="status">
                 <span>STA status:</span>
                 <div id="loading_mode_sta" class="loading_mode loading">Loading...</div>
@@ -81,7 +86,7 @@
                 <div id="loading_name" class="loading_mode loading">Loading...</div>
             </div>
 
-            New name: <input type='text' name='name' id="text_name" /><br/>
+            New name: <input type='text' name='name' id="text_name" maxlength="31"/><br/>
             <input type='submit' value='Set new name'/>
         </article>
     </form>

@@ -1,8 +1,46 @@
+h2 {
+    font-size: 21px;
+}
+
+h2:not(:first-of-type) {
+    margin-top: 30px;
+}
+
+#h2top {
+    margin-bottom: 0;
+}
+
+#divname {
+    margin: 7px 0 20px 17px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.section {
+    margin: 20px;
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+    max-width: 400px;
+}
+
+.links a {
+    display: block;
+    padding: 10px 20px;
+    background: #dfffd6;
+
+    margin: 0;
+    color: #222;
+    text-decoration: none;
+}
+
 .sliders {
 }
 
 .named-slider {
-    margin: 20px;
+    margin: 20px 0;
 }
 
 .red {   color: red; }

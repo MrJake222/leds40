@@ -89,6 +89,7 @@ void setup() {
     ftp_cli = 0;
     ftp.begin("norbert", "marcel!!");
     ftp.setCallback(ftp_cb);
+    ftp.setLocalIp(WiFi.softAPIP());
 
     configTime(TZ, NTP_SERVER);
 }

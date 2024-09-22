@@ -23,7 +23,7 @@ async function load_status() {
         console.debug("response status: ", resp)
 
         if (!resp.ok) {
-            throw Error("response status not ok, error: " + resp.statusText)
+            throw Error("response not ok, error: " + resp.statusText)
         }
 
         let json = await resp.json()
@@ -55,8 +55,7 @@ async function load_status() {
         }
     }
     catch (e) {
-        console.error("failed to load status")
-        console.error("error: " + e)
+        console.error("failed to load status", e)
         set_up_error(loading_ap, "Failed, see console for details")
         set_up_error(loading_sta, "Failed, see console for details")
     }
@@ -66,14 +65,14 @@ async function load_name() {
     console.info("loading name")
     
     let loading_name = document.getElementById("loading_name")
-    let text_name    = document.getElementById("loading_name")
+    let text_name    = document.getElementById("text_name")
 
     try {
         let resp = await fetch("/name")
         console.debug("response name: ", resp)
 
         if (!resp.ok) {
-            throw Error("response status not ok, error: " + resp.statusText)
+            throw Error("response not ok, error: " + resp.statusText)
         }
 
         let json = await resp.json()
@@ -91,8 +90,33 @@ async function load_name() {
         }
     }
     catch (e) {
-        console.error("failed to load name")
-        console.error("error: " + e)
+        console.error("failed to load name", e)
         set_up_error(loading_name, "Failed, see console for details")
+    }
+}
+
+async function load_mac() {
+    console.info("loading mac")
+    
+    let loading_mac = document.getElementById("loading_sta_mac")
+
+    try {
+        let resp = await fetch("/mac")
+        console.debug("response mac: ", resp)
+
+        if (!resp.ok) {
+            throw Error("response not ok, error: " + resp.statusText)
+        }
+
+        let json = await resp.json()
+        console.debug("Mac: ", json)
+
+        let mac = json["mac"]
+        loading_mac.innerHTML = mac
+        loading_mac.classList.remove("loading")
+    }
+    catch (e) {
+        console.error("failed to load mac", e)
+        set_up_error(loading_mac, "Failed, see console for details")
     }
 }
