@@ -1,0 +1,37 @@
+.section {
+    margin-left: 20px;
+    width: fit-content;
+}
+
+.fieldname {
+    text-align: right;
+    padding: 6px 9px 6px 0;
+}
+
+.btnadd {
+    margin: 0 0 0 auto;
+    display: block;
+    width: 70px;
+}
+
+#th-name {
+    min-width: 200px;
+}
+
+#th-addr {
+    min-width: 250px;
+}
+
+#th-del {
+    min-width: 50px;
+}
+
+.modrow td {
+    padding: 2px 0;
+}
+
+.btndel {
+    margin: 0 auto;
+    display: block;
+    width: 30px;
+}

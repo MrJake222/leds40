@@ -1,0 +1,115 @@
+/* ------------------- List creation / LED settings ------------------- */
+
+.lists {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+}
+
+.list {
+    position: relative;
+    width: fit-content;
+    margin: 0 20px 20px 0;
+}
+    .list>.name {
+        padding: 12px 0;
+        text-align: center;
+    }
+
+    .dellist {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 2px;
+    }
+
+.content {
+    padding: 10px 20px;
+    --spacing: 14px;
+}
+    .content h3 { margin: var(--spacing) 0; }
+    .content h3:first-of-type { margin-top:  0; }
+
+    .content .section {
+        margin-left: 10px;
+        width: calc(100% - 10px);
+    }
+
+    .right {
+        width: 50px;
+    }
+
+    .modules input[type=submit] {
+        margin: 0 auto;
+        display: block;
+    }
+    .modules select {
+        width: 90%;
+    }
+    .modules td { padding: 2px 0; }
+
+
+    .slider {
+        margin: 6px 0;
+        display: flex;
+    }
+
+    .slider .name { width: 12px; }
+
+    .red { color: red; }
+    .grn { color: green; }
+    .blu { color: blue; }
+
+    .slider input[type=range] {
+        margin: 0 6px;
+    }
+
+
+    .savecolor {
+        display: flex;
+        justify-content: space-between;
+        margin-top: var(--spacing);
+    }
+
+    .savecolor input[type=text] {
+        width: 130px;
+    }
+
+
+
+@media only screen and (max-width: 500px) {
+    /* .lists { flex-direction: column; } */
+    /* .list  { margin: 10px auto; } */
+}
+
+
+/* ------------------- Preset apply ------------------- */
+
+.set {
+    width: fit-content;
+    padding: 14px 20px;
+}
+    .set-tables {
+        display: flex;
+    }
+
+    .set-tables>*:first-child {
+        margin-right: 50px;
+    }
+
+    .set table {
+        height: fit-content;
+    }
+
+    .applyall {
+        width: 100%;
+        margin-top: 16px;
+    }
+
+    .set-divider-color {
+        padding: 10px 2px 10px 8px;
+    }
+
+    .set-divider-list {
+        padding: 4px 2px 4px 2px;
+    }
