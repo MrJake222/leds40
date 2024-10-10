@@ -1,0 +1,14 @@
+moduł buck converter np zawieszony nad płytką na goldpinach 
+	albo copper fill 3.3v jako radiator
+	albo użyć innego regulatora z gnd na tabie
+	odsłonić copper fill, dodać dużo via
+	
+dwa ledy 3mm (czerwona/zielona)
+
+PRZYCISK do włączania trybu AP
+
+Wieksze cynowane pole dla barreljack
+bez połączenia z 3.3V modułu usb-uart
+większy pad 120 ohm
+lepsze oznaczenie + LED
+ścięcie w rancie wymuszające orientację
