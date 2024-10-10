@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ARK")(type "KiCad")(uri "/home/norbert/Projects/leds40/board/lib_ARK/ARK.kicad_sym")(options "")(descr ""))
+  (lib (name "ESP-12S")(type "Legacy")(uri "${KIPRJMOD}/lib_ESP-12S/ESP-12S.lib")(options "")(descr ""))
+)
