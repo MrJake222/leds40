@@ -1,0 +1,28 @@
+services:
+  nginx-php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ../web:/var/www/leds
+    environment:
+      DB_PWD: notSecureChangeMeLeds
+  db:
+    image: mariadb:10.11
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MARIADB_DATABASE: leds
+      MARIADB_USER: leds
+      MARIADB_PASSWORD: notSecureChangeMeLeds
+      MARIADB_ROOT_PASSWORD: notSecureChangeMeRoot
+  phpmyadmin:
+    image: phpmyadmin:5
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: notSecureChangeMeRoot
