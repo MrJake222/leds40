@@ -271,8 +271,7 @@
     <h3>Existing lists</h3>
     <div class="lists indent">
         <?php
-            function module_table_on_list($list_id) { ?>
-                <?php
+            function module_table_on_list($list_id) {
                     // second connection to fetch nested results
                     $db2 = db_connect();
                     $stmt = $db2->prepare("

@@ -1,7 +1,7 @@
 function clamp(val, min, max) { return Math.min(Math.max(val, min), max) }
 
 async function set_leds(list_id, color, value, db) {
-    let resp = await fetch("/sliders.php", {
+    let resp = await fetch("/room/sliders.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
