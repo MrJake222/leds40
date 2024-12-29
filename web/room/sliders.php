@@ -1,8 +1,8 @@
 <?php
-    include 'libs/db.php';
-    include 'libs/leds.php';
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/db.php";
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/leds.php";
 
-    if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
         die("only POST here");
     }
 

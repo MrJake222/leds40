@@ -1,5 +1,5 @@
 <?php
-    include "libs/db.php";
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/db.php";
 ?>
 
 <!DOCTYPE html>
@@ -8,9 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED4.0 rooms</title>
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="mgmt.css">
-    <script src="verify.js"></script>
+    <script src="/prompt.js"></script>
 </head>
 
 <body>

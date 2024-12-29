@@ -13,6 +13,7 @@ services:
     image: mariadb:10.11
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      #- ../backup.sql:/docker-entrypoint-initdb.d/backup.sql
     environment:
       MARIADB_DATABASE: leds
       MARIADB_USER: leds

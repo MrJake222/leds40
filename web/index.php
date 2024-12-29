@@ -1,5 +1,5 @@
 <?php
-    include "libs/db.php";
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/db.php";
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED4.0</title>
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="index.css">
 </head>
 
@@ -17,7 +17,7 @@
     <div class="links indent">
 
         <?php if ($admin) { ?>
-            <a href="/rooms.php" class="admin">Manage rooms</a>
+            <a href="/mgmt/rooms.php" class="admin">Manage rooms</a>
         <?php } ?>
 
     </div>
@@ -31,7 +31,7 @@
 
                 while ($stmt->fetch()) { ?>
                 
-                        <a href="room.php?room_id=<?= $room_id ?>"><?= $name ?></a>
+                        <a href="/room/room.php?room_id=<?= $room_id ?>"><?= $name ?></a>
 
                 <?php }
 

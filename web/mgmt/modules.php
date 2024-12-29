@@ -1,6 +1,5 @@
 <?php
-    include "libs/db.php";
-    include 'libs/hlp.php';
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/db.php";
 
     $room_id = $_GET["room_id"];
     $room_name = get_room_name($db, $room_id);
@@ -12,23 +11,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED4.0 modules</title>
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="mgmt.css">
-    <script src="verify.js"></script>
+    <script src="/prompt.js"></script>
 </head>
 
 <body>
-    <?php
-        $room_id = $_GET["room_id"];
-        if (!isset($room_id)) {
-            die("Please select room");
-        }
-    ?>
-
     <h1>LED4.0 modules</h1>
     <div class="links indent">
-        <a href="room.php?room_id=<?= $room_id ?>">Back to room</a>
+        <a href="/room/room.php?room_id=<?= $room_id ?>">Back to room</a>
     </div>
+
+    <?php
+        if (!isset($room_id)) {
+            die("Please select a room");
+        }
+    ?>
 
     <?php        
         if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -1,7 +1,6 @@
 <?php
-    include 'libs/db.php';
-    include 'libs/leds.php';
-    include 'libs/hlp.php';
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/db.php";
+    include $_SERVER["DOCUMENT_ROOT"] . "/libs/leds.php";
 
     $room_id = $_GET["room_id"];
     $room_name = get_room_name($db, $room_id);
@@ -13,9 +12,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED4.0 <?= $room_name ?></title>
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="room.css">
-
+    <script src="/prompt.js"></script>
     <script src="verify.js"></script>
     <script src="sliders.js" defer></script>
 </head>
@@ -25,7 +24,7 @@
     <div class="links indent">
         <a href="/">Change room</a>
         <?php if ($admin) { ?>
-            <a href="/modules.php?room_id=<?= $room_id ?>" class="admin">Manage modules</a>
+            <a href="/mgmt/modules.php?room_id=<?= $room_id ?>" class="admin">Manage modules</a>
         <?php } ?>
     </div>
 
@@ -36,7 +35,7 @@
     ?>
 
     <?php
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $act = $_POST["action"];
 
             if ($act == "addlist") {
@@ -122,7 +121,7 @@
                     $stmt->close();
 
                     // send update to all modules on selected lists
-                    $placeholders = str_repeat('?,', count($list_ids) - 1) . '?';
+                    $placeholders = str_repeat("?,", count($list_ids) - 1) . "?";
                     $stmt = $db->prepare(
                         "SELECT `address` FROM `modules`
                          INNER JOIN `listmod`
@@ -140,7 +139,7 @@
                         WHERE `list_id` IN ($placeholders);");
                     $stmt->execute(array_merge([$red, $grn, $blu], $list_ids));
 
-                    // TODO create or update (don't create new)
+                    // TODO create or update (don"t create new)
                     // delete old user selections
                     $stmt = $db->prepare("DELETE FROM `listsel` WHERE `room_id` = ?;");
                     $stmt->execute([$room_id]);
@@ -182,7 +181,7 @@
         }
     ?>
     <!-- used to avoid nesting color delete form -->
-    <form id="setcolor" method='POST' onsubmit="setcolor_verify(event)">
+    <form id="setcolor" method="POST" onsubmit="setcolor_verify(event)">
         <input type="hidden" name="action" value="setcolor">
     </form>
     <div class="indent set fg">
@@ -203,7 +202,7 @@
 
                             <tr>
                                 <td>
-                                    <form method='POST' onsubmit="delete_prompt(event, 'preset <?= $name ?>')">
+                                    <form method="POST" onsubmit="delete_prompt(event, 'preset <?= $name ?>')">
                                         <input type="hidden" name="action" value="delcolor">
                                         <input type="hidden" name="color_id" value="<?= $color_id ?>">
                                         <input type="submit" value="X">
@@ -324,8 +323,8 @@
 
                 while ($stmt->fetch()) { ?>
 
-                    <div class='list fg'>
-                        <div class='name' style="background: rgba(<?= $red ?>, <?= $grn ?>, <?= $blu ?>, 0.3)"><?= $name ?></div>
+                    <div class="list fg">
+                        <div class="name" style="background: rgba(<?= $red ?>, <?= $grn ?>, <?= $blu ?>, 0.3)"><?= $name ?></div>
 
                         <form method="POST" class="dellist" onsubmit="delete_prompt(event, 'list <?= $name ?>')">
                             <input type="hidden" name="action" value="dellist">

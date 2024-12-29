@@ -1,4 +1,4 @@
-function count_checked(inputs) {
+function _count_checked(inputs) {
     return [...inputs]
         .map(c => c.checked ? 1 : 0)
         .reduce((acc, cur) => acc + cur, 0);
@@ -7,8 +7,8 @@ function count_checked(inputs) {
 function setcolor_verify(ev) {
     let radios = document.querySelectorAll("#verify-chk input[type=radio]");
     let checkboxes = document.querySelectorAll("#verify-chk input[type=checkbox]");
-    let checked_radios = count_checked(radios);
-    let checked_boxes = count_checked(checkboxes);
+    let checked_radios = _count_checked(radios);
+    let checked_boxes = _count_checked(checkboxes);
 
     if (checked_radios < 1) {
         alert("No presets available");
@@ -25,13 +25,6 @@ function setcolor_verify(ev) {
             alert("No lists available");
         }
 
-        ev.preventDefault();
-    }
-}
-
-function delete_prompt(ev, name) {
-    let yes = confirm(`Do you really want to delete ${name}?`);
-    if (!yes) {
         ev.preventDefault();
     }
 }
