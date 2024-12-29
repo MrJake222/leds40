@@ -18,5 +18,6 @@
     }
 
     $db = db_connect();
-    $auth_user = $_SERVER["AUTHELIA_USER"];
+    // $auth_user = $_SERVER["AUTHELIA_USER"];
+    $admin = true;
 ?>
